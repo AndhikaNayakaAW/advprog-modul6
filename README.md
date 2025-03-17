@@ -51,3 +51,22 @@ To simulate a performance bottleneck, I introduced a `/sleep` route in the web s
 - **Multithreading or asynchronous processing** is necessary in real-world applications to ensure smooth handling of multiple requests.
 
 This experiment deepened my understanding of web server performance and the role of concurrency in handling simultaneous connections efficiently.  
+
+## Commit 5: Reflection Notes
+
+In this milestone, I improved the server’s performance by implementing a **ThreadPool**, allowing it to handle multiple incoming connections concurrently. Instead of creating a new thread for every request, I initialized a fixed number of reusable worker threads using `ThreadPool::new(4)`. This approach significantly improves efficiency and scalability.
+
+### How the ThreadPool Works
+
+- A **fixed number of worker threads** (four in this case) are created at startup and remain active.
+- Instead of spawning new threads for each request, tasks are **queued** and assigned to available worker threads.
+- The `execute` method sends a closure (task) to the **message passing channel (mpsc)**, where it is received and executed by an idle worker thread.
+
+### Key Takeaways
+
+- **Avoiding excessive thread creation**: Instead of creating and destroying threads dynamically, which is costly, I reuse a fixed pool of threads.
+- **Efficient concurrency**: The pool allows handling multiple requests in parallel, improving responsiveness under load.
+- **Using `usize` for thread count**: This ensures only valid non-negative values are used, preventing invalid configurations.
+- **Defining closures with `FnOnce()`**: Since each task is only executed once per connection, using `FnOnce()` ensures correct behavior without unnecessary overhead.
+
+By implementing a **multithreaded server**, I have taken a crucial step toward building a more scalable and performant web server. 
