@@ -23,3 +23,14 @@ A key takeaway from this update is the importance of the `Content-Length` header
 4. The **actual HTML content**
 
 By ensuring the response follows this format, the browser can correctly interpret and render the webpage.  
+
+## Commit 3: Reflection Notes
+
+![Commit 3 screen capture](/assets/images/commit3.png)
+
+In this milestone, I implemented conditional response logic in the `handle_connection` method to serve different pages based on the requested path. The key idea was to inspect the request line from the browser and return an appropriate response:
+
+- If the request is for `/` (`GET / HTTP/1.1`), the server responds with a `200 OK` status and serves `hello.html`.
+- If the request is for any other path (e.g., `/bad`), the server returns a `404 NOT FOUND` status and serves a custom `404.html` file.
+
+This simple request validation ensures that only valid URLs return content, mimicking real-world web server behavior.
