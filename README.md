@@ -34,3 +34,20 @@ In this milestone, I implemented conditional response logic in the `handle_conne
 - If the request is for any other path (e.g., `/bad`), the server returns a `404 NOT FOUND` status and serves a custom `404.html` file.
 
 This simple request validation ensures that only valid URLs return content, mimicking real-world web server behavior.
+
+## Commit 4: Reflection Notes
+
+To simulate a performance bottleneck, I introduced a `/sleep` route in the web server. When accessed, this route causes the server to **pause for 10 seconds** using `thread::sleep()` before responding. This experiment highlights a critical limitation of single-threaded servers: **a slow request can block all other incoming requests**.
+
+### Observations
+
+- Accessing `/sleep` in one browser tab **froze the entire server**, preventing any other requests from being processed until the delay was over.
+- Even when trying to access `/` in a separate tab, the request was blocked until `/sleep` finished executing.
+
+### Key Takeaways
+
+- **Single-threaded servers lack scalability**—a single slow request can impact all users.
+- **Concurrency is crucial** in web server design to maintain responsiveness under load.
+- **Multithreading or asynchronous processing** is necessary in real-world applications to ensure smooth handling of multiple requests.
+
+This experiment deepened my understanding of web server performance and the role of concurrency in handling simultaneous connections efficiently.  
